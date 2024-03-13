@@ -13,14 +13,14 @@ resource "azurerm_subnet" "n01392662_subnet" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-resource "azurerm_network_security_group" "n01392662_nsg" {
-  name                = "${var.vnet_name}-NSG"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  tags                = var.tags
-}
+# resource "azurerm_network_security_group" "n01392662_nsg" {
+#   name                = "${var.vnet_name}-NSG"
+#   location            = var.location
+#   resource_group_name = var.resource_group_name
+#   tags                = var.tags
+# }
 
-resource "azurerm_network_security_group" "nsg1" {
+resource "azurerm_network_security_group" "n01392662_nsg" {
   name                = "n01392662-sg"
   location            = var.location
   resource_group_name = var.resource_group_name
