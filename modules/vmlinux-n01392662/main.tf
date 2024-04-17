@@ -58,7 +58,9 @@ resource "azurerm_public_ip" "n01392662_vm_pip" {
   allocation_method   = "Dynamic"
   domain_name_label   = "${var.linux_vm_names}${format("%1d", count.index)}"
   count               = var.nb_count
-  tags                = var.tags
+  # sku                 = "Standard"
+  # zones               = [var.zone]
+  tags = var.tags
 }
 
 # Virtual Machines
@@ -74,7 +76,8 @@ resource "azurerm_linux_virtual_machine" "n01392662_vm" {
   network_interface_ids           = [element(azurerm_network_interface.linux_nic[*].id, count.index)]
   depends_on                      = [azurerm_availability_set.n01392662_avs]
   availability_set_id             = azurerm_availability_set.n01392662_avs.id
-
+  #either availability set and zone can be choosed
+  # zone = var.zone
   os_disk {
     name                 = "${var.linux_vm_names}${format("%1d", count.index)}-os-disk"
     caching              = var.caching
@@ -108,7 +111,7 @@ resource "azurerm_linux_virtual_machine" "n01392662_vm" {
       host        = self.public_ip_address
       user        = var.admin_username
       private_key = file(var.private_key)
-      agent = false
+      agent       = false
     }
   }
 

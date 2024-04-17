@@ -20,6 +20,7 @@ variable "w_os_sku" {}
 
 variable "w_os_version" {}
 
+variable "zone" {}
 variable "location" {
   description = "The Azure region where to deploy the resources."
 }

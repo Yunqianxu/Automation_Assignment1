@@ -34,6 +34,8 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
   computer_name         = each.key
   admin_username        = var.w_admin_username
   admin_password        = var.w_admin_password
+
+  # zone = var.zone
   os_disk {
     name                 = "${each.key}-osdisk"
     caching              = var.w_caching

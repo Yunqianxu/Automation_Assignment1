@@ -4,10 +4,10 @@ variable "location" {
 
 variable "common_tags" {
   default = {
-    Assignment     = "CCGC 5502 Automation Assignment"
-    Name           = "firstname.lastname"
+    Assignment     = "Cloud Security"
+    Name           = "Yunqian Xu"
     ExpirationDate = "2024-12-31"
-    Environment    = "Learning"
+    Environment    = "Project"
   }
 }
 
@@ -18,7 +18,6 @@ module "resource_groups" {
   tags     = var.common_tags
 }
 
-
 module "network_module" {
   source              = "./modules/network-n01392662"
   vnet_name           = "n01392662_vnet"
@@ -26,6 +25,29 @@ module "network_module" {
   location            = var.location
   resource_group_name = module.resource_groups.resource_group_name
   tags                = var.common_tags
+}
+
+module "linux_vm_module" {
+  source               = "./modules/vmlinux-n01392662"
+  resource_group_name  = module.resource_groups.resource_group_name
+  location             = var.location
+  zone                 = 1
+  linux_vm_names       = "n01392662-u-vm"
+  vm_size              = "Standard_B1s"
+  storage_account_type = "Premium_LRS"
+  caching              = "ReadWrite"
+  admin_username       = "Yunqi"
+  public_key           = "~/.ssh/id_rsa.pub"
+  private_key          = "~/.ssh/id_rsa"
+  storage_account_uri  = module.common_n01392662_module.storage_account_primary_blob_endpoint
+  disk_size            = 32
+  os_publisher         = "OpenLogic"
+  os_offer             = "CentOS"
+  os_sku               = "8_2"
+  os_version           = "latest"
+  nb_count             = 3 # 3 required
+  subnet_id            = module.network_module.subnet_id
+  tags                 = var.common_tags
 }
 
 module "common_n01392662_module" {
@@ -38,31 +60,12 @@ module "common_n01392662_module" {
   tags                         = var.common_tags
 }
 
-module "linux_vm_module" {
-  source               = "./modules/vmlinux-n01392662"
-  resource_group_name  = module.resource_groups.resource_group_name
-  location             = var.location
-  linux_vm_names       = "n01392662-u-vm"
-  vm_size              = "Standard_B1s"
-  caching              = "ReadWrite"
-  admin_username       = "Yunqi"
-  public_key           = "~/.ssh/id_rsa.pub"
-  private_key          = "~/.ssh/id_rsa"
-  storage_account_uri  = module.common_n01392662_module.storage_account_primary_blob_endpoint
-  storage_account_type = "Premium_LRS"
-  disk_size            = 32
-  os_publisher         = "OpenLogic"
-  os_offer             = "CentOS"
-  os_sku               = "8_2"
-  os_version           = "latest"
-  nb_count             = 3 # 3 required
-  subnet_id            = module.network_module.subnet_id
-  tags                 = var.common_tags
-}
+
 
 module "windows_vm_module" {
   source      = "./modules/vmwindows-n01392662"
   windows_avs = "windows_avs"
+  zone        = 2
   windows_name = {
     "n01392662-w-vm1" = "Standard_B1s"
     # "n01392662-w-vm2" = "Standard_B1ms"

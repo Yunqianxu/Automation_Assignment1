@@ -2,6 +2,10 @@ variable "resource_group_name" {}
 
 variable "location" {}
 
+variable "zone" {
+
+}
+
 variable "linux_vm_names" {}
 
 variable "vm_size" {}
